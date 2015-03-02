@@ -125,6 +125,7 @@ def breadthFirstSearch(problem):
     successors = None
     explored = set()
     item = None
+    explored.add(problem.getStartState())
     while not problem.isGoalState(current_state[0]):
         (current_pos, directions) = current_state
         successors = problem.getSuccessors(current_pos)
@@ -144,7 +145,27 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.PriorityQueue()
+    current_state = [problem.getStartState(), [], 0]
+    successors = None
+    explored = set()
+    item = None
+    explored.add(problem.getStartState())
+    while not problem.isGoalState(current_state[0]):
+        (current_pos, directions, cost) = current_state
+        successors = problem.getSuccessors(current_pos)
+        for item in successors:
+            fringe.push((item[0], directions + [item[1]], cost + item[2]), cost + item[2])
+        while(True):
+            if (fringe.isEmpty()):
+                return None
+            item = fringe.pop()
+            if item[0] not in explored:
+                break
+        current_state = (item[0], item[1], item[2])
+        explored.add(item[0])
+    return current_state[1]
+    #util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -156,7 +177,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.PriorityQueue()
+    current_state = [problem.getStartState(), [], 0]
+    successors = None
+    explored = set()
+    item = None
+    explored.add(problem.getStartState())
+    while not problem.isGoalState(current_state[0]):
+
+        (current_pos, directions, cost) = current_state
+        successors = problem.getSuccessors(current_pos)
+        for item in successors:
+            fringe.push((item[0], directions + [item[1]], cost + item[2]), cost + item[2]+heuristic(item[0],problem))
+        while(True):
+            if (fringe.isEmpty()):
+                return None
+            item = fringe.pop()
+            if item[0] not in explored:
+                break
+        current_state = (item[0], item[1], item[2])
+        explored.add(item[0])
+    return current_state[1]
+    #util.raiseNotDefined()
 
 
 # Abbreviations
