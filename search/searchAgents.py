@@ -318,7 +318,6 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -384,7 +383,27 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    position = state[0]
+    cornersInd = state[1]
+   
+   #goal state
+    if not cornersInd:
+        return 0
+    #get the distance to closest corner
+    cornersLeftCoord =map(lambda x:corners[x], cornersInd)
+
+    def getDist(x):
+        if tuple(list(position)+list(x)) in problem.info.keys():
+            return problem.info[tuple(list(position)+list(x))]
+        else:
+            dist = mazeDistance(position, x, problem.startGameState)
+            problem.info[tuple(list(position)+list(x))]=dist
+            return dist                           
+
+    distanceToCorners = map(getDist, cornersLeftCoord)
+    farthest = max(distanceToCorners)
+  
+    return farthest
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -478,7 +497,32 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    try:
+        problem.heuristicInfo['dist']
+    except:
+        problem.heuristicInfo['dist'] = dict()
+        problem.heuristicInfo['count'] = 0
+    currentX,currentY = position
+    foods = foodGrid.asList()
+
+    if not foods:
+        return 0
+
+    def getDist(x):
+    #   print problem.heuristicInfo['dist']
+        if tuple(list(position)+list(x)) in problem.heuristicInfo['dist'].keys():
+            problem.heuristicInfo['count']+=1
+            return problem.heuristicInfo['dist'][tuple(list(position)+list(x))]
+        else:
+            dist = mazeDistance(position, x, problem.startingGameState)
+            problem.heuristicInfo['dist'][tuple(list(position)+list(x))]=dist
+            return dist                           
+    distanceToFoods = map(getDist, foods)
+    closestDist = min(distanceToFoods)
+    farthestDist = max(distanceToFoods)
+
+    return farthestDist
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -509,7 +553,8 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.bfs(problem)
+#        util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -545,7 +590,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return state in self.food.asList()
+        #util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
