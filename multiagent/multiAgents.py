@@ -74,7 +74,17 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+	""" #Print for outputs# 
+	print newPos
+	print newFood
+	print newGhostStates
+	print newScaredTimes
+        print " " 
+	"""
+	
+	
+	
+	return successorGameState.getScore()
 
 def scoreEvaluationFunction(currentGameState):
     """
