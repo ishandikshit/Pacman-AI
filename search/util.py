@@ -127,7 +127,7 @@ class Stack:
         self.list.append(item)
 
     def pop(self):
-        "Pop the most recently pushed item from the stack"
+        "Pop the most replacemently pushed item from the stack"
         return self.list.pop()
 
     def isEmpty(self):
