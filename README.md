@@ -2,12 +2,12 @@
 Used for educational purposes only
 
 How to Play A classic Game of Pacman:
-'''
+```
 python pacman.py
-'''
+```
 
 To Run Reflex Agent: 
-'''python pacman.py -p ReflexAgent -l testClassic'''
+```python pacman.py -p ReflexAgent -l testClassic```
 
 To Run MiniMax Agent:
 python pacman.py -p MinimaxAgent -l minimaxClassic -a depth=4
